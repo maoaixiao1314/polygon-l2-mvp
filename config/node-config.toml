@@ -1,0 +1,171 @@
+# Polygon zkEVM Node Configuration - MVP Version
+# 轻量级配置，适合单服务器部署
+
+[Log]
+Environment = "development"
+Level = "info"
+Outputs = ["stderr"]
+
+[StateDB]
+User = "zkevmuser"
+Password = "zkevmpassword"
+Name = "state_db"
+Host = "zkevm-db"
+Port = "5432"
+EnableLog = false
+MaxConns = 50  # MVP: 减少连接数
+
+[Pool]
+IntervalToRefreshBlockedAddresses = "5m"
+IntervalToRefreshGasPrices = "5s"
+MaxTxBytesSize = 100132
+MaxTxDataBytesSize = 100000
+DefaultMinGasPriceAllowed = 1000000000
+MinAllowedGasPriceInterval = "5m"
+PollMinAllowedGasPriceInterval = "15s"
+AccountQueue = 32  # MVP: 减少队列大小
+GlobalQueue = 512  # MVP: 减少队列大小
+
+[Pool.DB]
+    User = "zkevmuser"
+    Password = "zkevmpassword"
+    Name = "pool_db"
+    Host = "zkevm-db"
+    Port = "5432"
+    EnableLog = false
+    MaxConns = 50  # MVP: 减少连接数
+
+# ============ L1 连接配置 (atoshi-chain) ============
+[Etherman]
+URL = "http://YOUR_ATOSHI_CHAIN_RPC:8545"  # ← 改成你的 atoshi-chain RPC
+MultiGasProvider = false
+L1ChainID = 12345  # ← 改成你的 atoshi-chain Chain ID
+
+# L1 合约地址 (部署后填写)
+[Etherman.Contracts]
+    GlobalExitRootManagerAddr = "0x..."  # ← 部署后填写
+    RollupManagerAddr = "0x..."          # ← 部署后填写
+    POLAddr = "0x..."                    # ← 你的原生代币地址
+
+# ============ RPC 配置 ============
+[RPC]
+Host = "0.0.0.0"
+Port = 8545
+ReadTimeout = "60s"
+WriteTimeout = "60s"
+MaxRequestsPerIPAndSecond = 100  # MVP: 降低限制
+SequencerNodeURI = "http://zkevm-sequencer:8545"
+EnableL2SuggestedGasPricePolling = true
+BatchRequestsEnabled = true
+BatchRequestsLimit = 20
+MaxLogsCount = 10000
+MaxLogsBlockRange = 10000
+MaxNativeBlockHashBlockRange = 60000
+EnableHttpLog = true
+
+[RPC.WebSockets]
+    Enabled = true
+    Port = 8546
+
+# ============ Synchronizer 配置 ============
+[Synchronizer]
+SyncInterval = "2s"  # MVP: 稍微慢一点
+SyncChunkSize = 50   # MVP: 减少批次大小
+TrustedSequencerURL = "http://zkevm-sequencer:8545"
+L1SynchronizationMode = "sequential"
+L1BlockCheck = "latest"
+
+# ============ Sequencer 配置 (MVP 优化) ============
+[Sequencer]
+WaitPeriodPoolIsEmpty = "2s"  # MVP: 增加等待时间
+LastBatchVirtualizationTimeMaxWaitPeriod = "10s"
+BlocksAmountForTxsToBeDeleted = 100
+FrequencyToCheckTxsForDelete = "12h"
+TxLifetimeCheckTimeout = "10m"
+MaxTxLifetime = "3h"
+MaxTxSizeForL1 = 131072
+
+# Batch 配置 (MVP 优化)
+[Sequencer.Finalizer]
+    GERDeadlineTimeout = "10s"
+    ForcedBatchDeadlineTimeout = "120s"
+    SleepDuration = "500ms"  # MVP: 增加休眠时间
+    ResourcePercentageToCloseBatch = 50  # MVP: 更快关闭批次
+    GERFinalityNumberOfBlocks = 64
+    ClosingSignalsManagerWaitForCheckingL1Timeout = "10s"
+    ClosingSignalsManagerWaitForCheckingGER = "10s"
+    ClosingSignalsManagerWaitForCheckingForcedBatches = "10s"
+    ForcedBatchesFinalityNumberOfBlocks = 64
+    TimestampResolution = "15s"
+    StopSequencerOnBatchNum = 0
+
+[Sequencer.Finalizer.Metrics]
+    Interval = "60m"
+    EnableLog = true
+
+[Sequencer.StreamServer]
+    Port = 6900
+    Filename = "/datastreamer/datastream.bin"
+    Enabled = false  # MVP: 禁用 (节省资源)
+
+# ============ Aggregator 配置 (MVP 优化) ============
+[Aggregator]
+Host = "0.0.0.0"
+Port = 50081
+RetryTime = "10s"  # MVP: 增加重试时间
+VerifyProofInterval = "60s"  # MVP: 降低验证频率
+TxProfitabilityCheckerType = "acceptall"
+TxProfitabilityMinReward = "1.1"
+ProofStatePollingInterval = "10s"  # MVP: 降低轮询频率
+SenderAddress = "0x..."  # ← Aggregator 的地址
+CleanupLockedProofsInterval = "5m"
+GeneratingProofCleanupThreshold = "20m"
+
+# ============ Network 配置 ============
+[NetworkConfig.L1]
+    ChainID = 12345  # ← atoshi-chain Chain ID
+    PolAddr = "0x..."  # ← 原生代币地址
+    ZkEVMAddr = "0x..."  # ← Rollup 合约地址
+    RollupManagerAddr = "0x..."  # ← RollupManager 地址
+    GlobalExitRootManagerAddr = "0x..."  # ← GlobalExitRoot 地址
+
+# ============ Prover 连接 ============
+[MTClient]
+URI = "zkevm-prover:50061"
+
+[Executor]
+URI = "zkevm-prover:50071"
+MaxResourceExhaustedAttempts = 3
+WaitOnResourceExhaustion = "2s"
+MaxGRPCMessageSize = 100000000
+
+# ============ Metrics ============
+[Metrics]
+Host = "0.0.0.0"
+Port = 9091
+Enabled = true
+ProfilingHost = "0.0.0.0"
+ProfilingPort = 6060
+ProfilingEnabled = false
+
+# ============ Event Log ============
+[EventLog]
+[EventLog.DB]
+    User = "zkevmuser"
+    Password = "zkevmpassword"
+    Name = "event_db"
+    Host = "zkevm-db"
+    Port = "5432"
+    EnableLog = false
+    MaxConns = 50
+
+# ============ Hash DB ============
+[HashDB]
+User = "zkevmuser"
+Password = "zkevmpassword"
+Name = "prover_db"
+Host = "zkevm-db"
+Port = "5432"
+EnableLog = false
+MaxConns = 50
+

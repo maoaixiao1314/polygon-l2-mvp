@@ -1,0 +1,21 @@
+{
+  "root": "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "genesis": [
+    {
+      "contractName": "PolygonZkEVMDeployer",
+      "balance": "0",
+      "nonce": "1",
+      "address": "0x0000000000000000000000000000000000000000",
+      "bytecode": "0x",
+      "storage": {}
+    }
+  ],
+  "genesisBlockNumber": 0,
+  "l1Config": {
+    "chainId": 12345,
+    "polygonZkEVMAddress": "0x0000000000000000000000000000000000000000",
+    "maticTokenAddress": "0x0000000000000000000000000000000000000000",
+    "polygonZkEVMGlobalExitRootAddress": "0x0000000000000000000000000000000000000000"
+  }
+}
+

@@ -1,0 +1,48 @@
+{
+  "runExecutorServer": true,
+  "runExecutorClient": false,
+  "runExecutorClientMultithread": false,
+  
+  "runHashDBServer": true,
+  "runHashDBTest": false,
+  
+  "runAggregatorServer": true,
+  "runAggregatorClient": false,
+  "runAggregatorClientMock": false,
+  
+  "proverServerPort": 50061,
+  "proverServerMockPort": 50062,
+  "proverServerMockTimeout": 10000000,
+  
+  "hashDBServerPort": 50061,
+  "aggregatorServerPort": 50081,
+  "aggregatorClientPort": 50071,
+  "aggregatorClientHost": "127.0.0.1",
+  
+  "executorServerPort": 50071,
+  "executorROMInFile": "",
+  "executorClientPort": 50071,
+  "executorClientHost": "127.0.0.1",
+  
+  "inputFile": "",
+  "inputFile2": "",
+  "outputPath": "/app/data/output",
+  "configPath": "/app/data/config",
+  
+  "databaseURL": "postgresql://zkevmuser:zkevmpassword@zkevm-db:5432/prover_db",
+  
+  "dbNodesTableName": "state.nodes",
+  "dbProgramTableName": "state.program",
+  "dbConnectionsPool": 10,
+  "dbMultiWrite": true,
+  "dbMetrics": true,
+  "dbClearCache": false,
+  "dbGetTree": true,
+  
+  "cleanerPollingPeriod": 600,
+  "requestsPersistence": 3600,
+  "maxExecutorThreads": 20,
+  "maxProverThreads": 4,
+  "maxStateDBThreads": 8
+}
+

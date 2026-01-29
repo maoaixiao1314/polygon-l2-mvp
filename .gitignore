@@ -1,0 +1,94 @@
+# ============================================
+# Polygon L2 MVP - Git Ignore
+# ============================================
+
+# 环境变量文件 (包含敏感信息)
+.env
+.env.local
+.env.*.local
+
+# 私钥和 Keystore 文件
+*.keystore
+*.key
+*.pem
+config/sequencer.keystore
+config/aggregator.keystore
+config/*.keystore
+
+# 数据目录
+data/
+logs/
+*.log
+
+# PostgreSQL 数据
+data/postgres/
+data/prover/
+
+# Docker volumes
+docker-compose.override.yml
+
+# 临时文件
+*.tmp
+*.swp
+*.swo
+*~
+.DS_Store
+
+# IDE 配置
+.vscode/
+.idea/
+*.iml
+
+# Node modules (如果有前端)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python (如果有脚本)
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+env/
+
+# 构建产物
+dist/
+build/
+*.so
+*.dylib
+*.dll
+
+# 测试覆盖率
+coverage/
+*.cover
+.coverage
+
+# 备份文件
+*.bak
+*.backup
+backup/
+
+# 部署生成的文件
+deployments/
+deployed-addresses.json
+deployment-*.json
+
+# 证明文件 (可能很大)
+*.proof
+proofs/
+
+# 调试文件
+debug/
+*.debug
+
+# OS 文件
+Thumbs.db
+Desktop.ini
+
+# ============================================
+# 重要: .env 文件永远不要提交到 Git
+# 每个环境都应该有自己的 .env 配置
+# ============================================
+

@@ -1,4 +1,4 @@
-version: '3.8'
+# Docker Compose 配置 (移除 version 以避免警告)
 
 # ============================================
 # Polygon L2 MVP - 单服务器部署
@@ -53,16 +53,16 @@ services:
       - "50061:50061"  # MT service
       - "50071:50071"  # Executor service
     environment:
-      - PROVER_THREADS=${PROVER_THREADS:-4}
+      - PROVER_THREADS=${PROVER_THREADS:-2}
     command: /app/zkProver -c /app/config.json
     deploy:
       resources:
         limits:
-          cpus: '8'      # MVP: 8核 (生产: 32核)
-          memory: 16G    # MVP: 16GB (生产: 256GB)
+          cpus: '3'      # 4核服务器: 使用3核
+          memory: 8G     # 降低到8GB
         reservations:
-          cpus: '4'
-          memory: 8G
+          cpus: '2'
+          memory: 4G
 
   # ============ Synchronizer ============
   
@@ -85,8 +85,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2'
-          memory: 4G
+          cpus: '0.5'    # 降低到0.5核
+          memory: 2G
 
   # ============ Sequencer ============
   
@@ -116,8 +116,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '4'
-          memory: 8G
+          cpus: '0.5'    # 降低到0.5核
+          memory: 4G
 
   # ============ Aggregator ============
   
@@ -144,8 +144,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2'
-          memory: 4G
+          cpus: '0.5'    # 降低到0.5核
+          memory: 2G
 
   # ============ RPC Node (可选 - 如果需要公开访问) ============
   

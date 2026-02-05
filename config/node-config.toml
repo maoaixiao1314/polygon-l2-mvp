@@ -9,7 +9,7 @@ Outputs = ["stderr"]
 [StateDB]
 User = "zkevmuser"
 Password = "zkevmpassword"
-Name = "state_db"
+Name = "zkevmdb"
 Host = "zkevm-db"
 Port = "5432"
 EnableLog = false
@@ -29,7 +29,7 @@ GlobalQueue = 512  # MVP: 减少队列大小
 [Pool.DB]
     User = "zkevmuser"
     Password = "zkevmpassword"
-    Name = "pool_db"
+    Name = "zkevmdb"
     Host = "zkevm-db"
     Port = "5432"
     EnableLog = false
@@ -153,7 +153,7 @@ ProfilingEnabled = false
 [EventLog.DB]
     User = "zkevmuser"
     Password = "zkevmpassword"
-    Name = "event_db"
+    Name = "zkevmdb"
     Host = "zkevm-db"
     Port = "5432"
     EnableLog = false
@@ -163,7 +163,7 @@ ProfilingEnabled = false
 [HashDB]
 User = "zkevmuser"
 Password = "zkevmpassword"
-Name = "prover_db"
+Name = "zkevmdb"
 Host = "zkevm-db"
 Port = "5432"
 EnableLog = false

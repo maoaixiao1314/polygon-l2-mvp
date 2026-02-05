@@ -92,26 +92,35 @@ npm install
 
 ### 2.2 配置 L1 部署参数
 
-创建 `deploy_parameters.json`:
+**⚠️ 重要：配置文件必须放在 `deployment/v2/` 目录下！**
+
+需要创建两个配置文件：
+
+#### 文件 1: deploy_parameters.json
+
+```bash
+cd ~/zkevm-contracts/deployment/v2
+vim deploy_parameters.json
+```
 
 ```json
 {
   "realVerifier": true,
-  "trustedSequencerURL": "http://YOUR_SERVER_IP:8545",
+  "trustedSequencerURL": "http://YOUR_SERVER_IP:8547",
   "networkName": "atoshi-l2",
   "version": "0.0.1",
-  "trustedSequencer": "SEQUENCER_ADDRESS",
+  "trustedSequencer": "0xYourSequencerAddress",
   "chainID": 67890,
-  "trustedAggregator": "AGGREGATOR_ADDRESS",
+  "trustedAggregator": "0xYourAggregatorAddress",
   "trustedAggregatorTimeout": 604800,
   "pendingStateTimeout": 604800,
   "forkID": 7,
-  "admin": "DEPLOYER_ADDRESS",
-  "zkEVMOwner": "DEPLOYER_ADDRESS",
-  "timelockAddress": "DEPLOYER_ADDRESS",
+  "admin": "0xYourDeployerAddress",
+  "zkEVMOwner": "0xYourDeployerAddress",
+  "timelockAddress": "0xYourDeployerAddress",
   "minDelayTimelock": 3600,
-  "salt": "0x0000000000000000000000000000000000000000000000000000000000000000",
-  "initialZkEVMDeployerOwner": "DEPLOYER_ADDRESS",
+  "salt": "0x0000000000000000000000000000000000000000000000000000000000000001",
+  "initialZkEVMDeployerOwner": "0xYourDeployerAddress",
   "maticTokenAddress": "",
   "zkEVMDeployerAddress": "",
   "deployerPvtKey": "",
@@ -121,12 +130,106 @@ npm install
 }
 ```
 
+**参数说明：**
+- `salt`: CREATE2 部署盐值，用于生成确定性地址，使用 `0x00...01` 即可
+- `trustedSequencerURL`: 注意端口是 8547（避免与 L1 的 8545 冲突）
+
+#### 文件 2: create_rollup_parameters.json
+
+```bash
+cd ~/zkevm-contracts/deployment/v2
+vim create_rollup_parameters.json
+```
+
+```json
+{
+  "realVerifier": true,
+  "chainID": 67890,
+  "trustedSequencer": "0xYourSequencerAddress",
+  "trustedSequencerURL": "http://YOUR_SERVER_IP:8547",
+  "networkName": "atoshi-l2",
+  "forkID": 7,
+  "consensusContract": "PolygonZkEVMEtrog",
+  "description": "Atoshi L2 - Privacy-focused zkEVM Rollup",
+  "gasTokenAddress": "",
+  "gasTokenNetwork": 0
+}
+```
+
+**⚠️ 确保两个文件中的以下参数一致：**
+- `trustedSequencer` 地址
+- `chainID`
+- `trustedSequencerURL`
+
+#### 快速创建脚本
+
+```bash
+cd ~/zkevm-contracts/deployment/v2
+
+# 设置变量（替换为你的实际值）
+SEQUENCER_ADDR="0xYourSequencerAddress"
+AGGREGATOR_ADDR="0xYourAggregatorAddress"
+DEPLOYER_ADDR="0xYourDeployerAddress"
+SERVER_IP=$(curl -s ifconfig.me)
+
+# 创建 deploy_parameters.json
+cat > deploy_parameters.json << EOF
+{
+  "realVerifier": true,
+  "trustedSequencerURL": "http://${SERVER_IP}:8547",
+  "networkName": "atoshi-l2",
+  "version": "0.0.1",
+  "trustedSequencer": "${SEQUENCER_ADDR}",
+  "chainID": 67890,
+  "trustedAggregator": "${AGGREGATOR_ADDR}",
+  "trustedAggregatorTimeout": 604800,
+  "pendingStateTimeout": 604800,
+  "forkID": 7,
+  "admin": "${DEPLOYER_ADDR}",
+  "zkEVMOwner": "${DEPLOYER_ADDR}",
+  "timelockAddress": "${DEPLOYER_ADDR}",
+  "minDelayTimelock": 3600,
+  "salt": "0x0000000000000000000000000000000000000000000000000000000000000001",
+  "initialZkEVMDeployerOwner": "${DEPLOYER_ADDR}",
+  "maticTokenAddress": "",
+  "zkEVMDeployerAddress": "",
+  "deployerPvtKey": "",
+  "maxFeePerGas": "",
+  "maxPriorityFeePerGas": "",
+  "multiplierGas": ""
+}
+EOF
+
+# 创建 create_rollup_parameters.json
+cat > create_rollup_parameters.json << EOF
+{
+  "realVerifier": true,
+  "chainID": 67890,
+  "trustedSequencer": "${SEQUENCER_ADDR}",
+  "trustedSequencerURL": "http://${SERVER_IP}:8547",
+  "networkName": "atoshi-l2",
+  "forkID": 7,
+  "consensusContract": "PolygonZkEVMEtrog",
+  "description": "Atoshi L2 - Privacy-focused zkEVM Rollup",
+  "gasTokenAddress": "",
+  "gasTokenNetwork": 0
+}
+EOF
+
+# 验证
+ls -l *.json
+```
+
 ### 2.3 部署 L1 合约
 
 ```bash
-# 设置环境变量
-export MNEMONIC="your deployer mnemonic"  # 或使用私钥
-export INFURA_PROJECT_ID="your_l1_rpc_url"
+# 方式 1: 使用私钥 (推荐)
+export DEPLOYER_PRIVATE_KEY="0xYourPrivateKeyHere"
+export L1_RPC_URL="http://YOUR_ATOSHI_CHAIN_IP:8545"
+
+# 方式 2: 使用助记词
+# export MNEMONIC="your twelve word mnemonic phrase here"
+# export L1_RPC_URL="http://YOUR_ATOSHI_CHAIN_IP:8545"
 
 # 部署
 npm run deploy:testnet:ZkEVM:localhost
@@ -397,10 +500,14 @@ cast gas-price --rpc-url http://localhost:8545
 | Polygon L2 DB | 5433 | PostgreSQL (避免冲突) |
 | Blockscout L1 DB | 7432 | PostgreSQL (L1) |
 | Blockscout L1 Web | 80 | L1 区块浏览器 |
-| Blockscout L2 DB | 7434 | PostgreSQL (L2) |
-| Blockscout L2 Web | 81 | L2 区块浏览器 |
+| Blockscout L2 DB | 7434 | PostgreSQL (L2，待部署) |
+| Blockscout L2 Web | 81 | L2 区块浏览器（待部署） |
 | Prover MT | 50061 | Merkle Tree 服务 |
 | Prover Executor | 50071 | 执行器服务 |
+
+**注意：** 
+- L1 和 L2 需要各自独立的 Blockscout 实例
+- 确保 `.env` 文件已添加到 `.gitignore`，避免提交敏感信息
 
 ---
 

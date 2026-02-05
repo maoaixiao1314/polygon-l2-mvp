@@ -37,15 +37,15 @@ GlobalQueue = 512  # MVP: 减少队列大小
 
 # ============ L1 连接配置 (atoshi-chain) ============
 [Etherman]
-URL = "http://YOUR_ATOSHI_CHAIN_RPC:8545"  # ← 改成你的 atoshi-chain RPC
+URL = "http://54.169.30.130:8545"
 MultiGasProvider = false
-L1ChainID = 12345  # ← 改成你的 atoshi-chain Chain ID
+L1ChainID = 88388
 
-# L1 合约地址 (部署后填写)
+# L1 合约地址 (已部署)
 [Etherman.Contracts]
-    GlobalExitRootManagerAddr = "0x..."  # ← 部署后填写
-    RollupManagerAddr = "0x..."          # ← 部署后填写
-    POLAddr = "0x..."                    # ← 你的原生代币地址
+    GlobalExitRootManagerAddr = "0xb0d68747a16ff7718FB69f8679097Eb52d923Df6"
+    RollupManagerAddr = "0x52a5C8d210736f32253D5de05619780d4E6c157B"
+    POLAddr = "0x1dd7133aC43311345F78776E8C1bDA79Ff690E07"
 
 # ============ RPC 配置 ============
 [RPC]
@@ -117,17 +117,17 @@ VerifyProofInterval = "60s"  # MVP: 降低验证频率
 TxProfitabilityCheckerType = "acceptall"
 TxProfitabilityMinReward = "1.1"
 ProofStatePollingInterval = "10s"  # MVP: 降低轮询频率
-SenderAddress = "0x..."  # ← Aggregator 的地址
+SenderAddress = "0x7cB61D4117AE31a12E393a1Cfa3BaC666481D02E"
 CleanupLockedProofsInterval = "5m"
 GeneratingProofCleanupThreshold = "20m"
 
 # ============ Network 配置 ============
 [NetworkConfig.L1]
-    ChainID = 12345  # ← atoshi-chain Chain ID
-    PolAddr = "0x..."  # ← 原生代币地址
-    ZkEVMAddr = "0x..."  # ← Rollup 合约地址
-    RollupManagerAddr = "0x..."  # ← RollupManager 地址
-    GlobalExitRootManagerAddr = "0x..."  # ← GlobalExitRoot 地址
+    ChainID = 88388
+    PolAddr = "0x1dd7133aC43311345F78776E8C1bDA79Ff690E07"
+    ZkEVMAddr = "0x5a22e63e1f75488d14dcaCe6a820d34C6eB0097c"
+    RollupManagerAddr = "0x52a5C8d210736f32253D5de05619780d4E6c157B"
+    GlobalExitRootManagerAddr = "0xb0d68747a16ff7718FB69f8679097Eb52d923Df6"
 
 # ============ Prover 连接 ============
 [MTClient]

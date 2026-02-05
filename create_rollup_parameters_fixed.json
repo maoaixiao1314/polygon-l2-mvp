@@ -1,0 +1,17 @@
+{
+  "realVerifier": true,
+  "trustedSequencerURL": "http://54.169.30.130:8547",
+  "networkName": "atoshi-l2",
+  "description": "Atoshi L2 - Privacy-focused zkEVM Rollup",
+  "trustedSequencer": "0x498b5aec5d439b733dc2f58ab489783a23fb26da",
+  "chainID": 67890,
+  "adminZkEVM": "0x40a0cb1c63e026a81b55ee1308586e21eec1efa9",
+  "forkID": 7,
+  "consensusContract": "PolygonZkEVMEtrog",
+  "gasTokenAddress": "",
+  "deployerPvtKey": "",
+  "maxFeePerGas": "",
+  "maxPriorityFeePerGas": "",
+  "multiplierGas": ""
+}
+

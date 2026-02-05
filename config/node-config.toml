@@ -3,7 +3,7 @@
 
 [Log]
 Environment = "development"
-Level = "info"
+Level = "debug"
 Outputs = ["stderr"]
 
 [State]

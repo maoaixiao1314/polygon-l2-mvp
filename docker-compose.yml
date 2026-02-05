@@ -81,8 +81,8 @@ services:
       - ZKEVM_NODE_STATEDB_HOST=zkevm-db
       - ZKEVM_NODE_POOL_DB_HOST=zkevm-db
     volumes:
-      - ./config/node-config.toml:/app/config.toml
-      - ./config/genesis.json:/app/genesis.json
+      - ./config/node-config.toml:/app/config.toml:ro
+      - ./config/genesis.json:/app/genesis.json:ro
     command: 
       - "/bin/sh"
       - "-c"
@@ -110,9 +110,9 @@ services:
       - ZKEVM_NODE_STATEDB_HOST=zkevm-db
       - ZKEVM_NODE_POOL_DB_HOST=zkevm-db
     volumes:
-      - ./config/node-config.toml:/app/config.toml
-      - ./config/genesis.json:/app/genesis.json
-      - ./config/sequencer.keystore:/pk/sequencer.keystore
+      - ./config/node-config.toml:/app/config.toml:ro
+      - ./config/genesis.json:/app/genesis.json:ro
+      - ./config/sequencer.keystore:/pk/sequencer.keystore:ro
     ports:
       - "8547:8545"  # RPC (避免与 L1 的 8545 冲突)
       - "8548:8546"  # WebSocket (避免与 L1 的 8546 冲突)
@@ -143,9 +143,9 @@ services:
     environment:
       - ZKEVM_NODE_STATEDB_HOST=zkevm-db
     volumes:
-      - ./config/node-config.toml:/app/config.toml
-      - ./config/genesis.json:/app/genesis.json
-      - ./config/aggregator.keystore:/pk/aggregator.keystore
+      - ./config/node-config.toml:/app/config.toml:ro
+      - ./config/genesis.json:/app/genesis.json:ro
+      - ./config/aggregator.keystore:/pk/aggregator.keystore:ro
     ports:
       - "50081:50081"
     command:

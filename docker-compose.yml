@@ -79,7 +79,15 @@ services:
         condition: service_healthy
     environment:
       - ZKEVM_NODE_STATEDB_HOST=zkevm-db
+      - ZKEVM_NODE_STATEDB_PORT=5432
+      - ZKEVM_NODE_STATEDB_NAME=zkevmdb
+      - ZKEVM_NODE_STATEDB_USER=zkevmuser
+      - ZKEVM_NODE_STATEDB_PASSWORD=zkevmpassword
       - ZKEVM_NODE_POOL_DB_HOST=zkevm-db
+      - ZKEVM_NODE_POOL_DB_PORT=5432
+      - ZKEVM_NODE_POOL_DB_NAME=zkevmdb
+      - ZKEVM_NODE_POOL_DB_USER=zkevmuser
+      - ZKEVM_NODE_POOL_DB_PASSWORD=zkevmpassword
     volumes:
       - ./config/node-config.toml:/app/config.toml:ro
       - ./config/genesis.json:/app/genesis.json:ro
@@ -108,7 +116,15 @@ services:
       #   condition: service_started
     environment:
       - ZKEVM_NODE_STATEDB_HOST=zkevm-db
+      - ZKEVM_NODE_STATEDB_PORT=5432
+      - ZKEVM_NODE_STATEDB_NAME=zkevmdb
+      - ZKEVM_NODE_STATEDB_USER=zkevmuser
+      - ZKEVM_NODE_STATEDB_PASSWORD=zkevmpassword
       - ZKEVM_NODE_POOL_DB_HOST=zkevm-db
+      - ZKEVM_NODE_POOL_DB_PORT=5432
+      - ZKEVM_NODE_POOL_DB_NAME=zkevmdb
+      - ZKEVM_NODE_POOL_DB_USER=zkevmuser
+      - ZKEVM_NODE_POOL_DB_PASSWORD=zkevmpassword
     volumes:
       - ./config/node-config.toml:/app/config.toml:ro
       - ./config/genesis.json:/app/genesis.json:ro
@@ -142,6 +158,10 @@ services:
       #   condition: service_started
     environment:
       - ZKEVM_NODE_STATEDB_HOST=zkevm-db
+      - ZKEVM_NODE_STATEDB_PORT=5432
+      - ZKEVM_NODE_STATEDB_NAME=zkevmdb
+      - ZKEVM_NODE_STATEDB_USER=zkevmuser
+      - ZKEVM_NODE_STATEDB_PASSWORD=zkevmpassword
     volumes:
       - ./config/node-config.toml:/app/config.toml:ro
       - ./config/genesis.json:/app/genesis.json:ro

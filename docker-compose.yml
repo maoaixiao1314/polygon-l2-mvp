@@ -70,7 +70,7 @@ services:
   
   zkevm-sync:
     container_name: zkevm-sync
-    image: hermeznetwork/zkevm-node:v0.6.0
+    image: hermeznetwork/zkevm-node:v0.7.0
     restart: unless-stopped
     networks:
       - zkevm-network
@@ -105,7 +105,7 @@ services:
   
   zkevm-sequencer:
     container_name: zkevm-sequencer
-    image: hermeznetwork/zkevm-node:v0.6.0
+    image: hermeznetwork/zkevm-node:v0.7.0
     restart: unless-stopped
     networks:
       - zkevm-network
@@ -147,7 +147,7 @@ services:
   
   zkevm-aggregator:
     container_name: zkevm-aggregator
-    image: hermeznetwork/zkevm-node:v0.6.0
+    image: hermeznetwork/zkevm-node:v0.7.0
     restart: unless-stopped
     networks:
       - zkevm-network

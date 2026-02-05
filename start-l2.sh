@@ -45,13 +45,11 @@ sleep 15
 echo "🔍 检查数据库状态..."
 docker compose ps zkevm-db
 
-# 启动 Prover
-echo "🔐 启动 Prover..."
-docker compose up -d zkevm-prover
-
-# 等待 Prover 启动
-echo "⏳ 等待 Prover 启动 (10秒)..."
-sleep 10
+# 启动 Prover (暂时跳过 - MVP 测试不需要)
+# echo "🔐 启动 Prover..."
+# docker compose up -d zkevm-prover
+# echo "⏳ 等待 Prover 启动 (10秒)..."
+# sleep 10
 
 # 启动 Synchronizer
 echo "🔄 启动 Synchronizer..."

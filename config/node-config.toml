@@ -99,14 +99,6 @@ SenderAddress = "0x7cB61D4117AE31a12E393a1Cfa3BaC666481D02E"
 CleanupLockedProofsInterval = "5m"
 GeneratingProofCleanupThreshold = "20m"
 
-[NetworkConfig.L1]
-L1ChainID = 88388
-PolAddr = "0x1dd7133aC43311345F78776E8C1bDA79Ff690E07"
-ZkEVMAddr = "0x5a22e63e1f75488d14dcaCe6a820d34C6eB0097c"
-RollupManagerAddr = "0x52a5C8d210736f32253D5de05619780d4E6c157B"
-GlobalExitRootManagerAddr = "0xb0d68747a16ff7718FB69f8679097Eb52d923Df6"
-PolygonZkEVMBridgeAddr = "0xDb66ade8c5932f0e60Fa3976330C4DDC222E4812"
-
 [MTClient]
 URI = "zkevm-prover:50061"
 
@@ -124,15 +116,15 @@ ProfilingHost = "0.0.0.0"
 ProfilingPort = 6060
 ProfilingEnabled = false
 
-[EventLog]
-	[EventLog.DB]
-	User = "zkevmuser"
-	Password = "zkevmpassword"
-	Name = "zkevmdb"
-	Host = "zkevm-db"
-	Port = "5432"
-	EnableLog = false
-	MaxConns = 50
+# [EventLog]
+# 	[EventLog.DB]
+# 	User = "zkevmuser"
+# 	Password = "zkevmpassword"
+# 	Name = "zkevmdb"
+# 	Host = "zkevm-db"
+# 	Port = "5432"
+# 	EnableLog = false
+# 	MaxConns = 50
 
 [HashDB]
 User = "zkevmuser"

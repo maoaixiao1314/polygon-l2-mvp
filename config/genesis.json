@@ -1,21 +1,12 @@
 {
-  "root": "0x0000000000000000000000000000000000000000000000000000000000000000",
-  "genesis": [
-    {
-      "contractName": "PolygonZkEVMDeployer",
-      "balance": "0",
-      "nonce": "1",
-      "address": "0x0000000000000000000000000000000000000000",
-      "bytecode": "0x",
-      "storage": {}
-    }
-  ],
+  "root": "0xae59e9b1e19731ef2b46993b5f625b0d42986fd2c2af823334577910c27a0744",
+  "genesis": [],
   "genesisBlockNumber": 0,
   "l1Config": {
-    "chainId": 12345,
-    "polygonZkEVMAddress": "0x0000000000000000000000000000000000000000",
-    "maticTokenAddress": "0x0000000000000000000000000000000000000000",
-    "polygonZkEVMGlobalExitRootAddress": "0x0000000000000000000000000000000000000000"
+    "chainId": 88388,
+    "polygonZkEVMAddress": "0x5a22e63e1f75488d14dcaCe6a820d34C6eB0097c",
+    "polygonRollupManagerAddress": "0x52a5C8d210736f32253D5de05619780d4E6c157B",
+    "polTokenAddress": "0x1dd7133aC43311345F78776E8679097Eb52d923Df6",
+    "polygonZkEVMGlobalExitRootAddress": "0xb0d68747a16ff7718FB69f8679097Eb52d923Df6"
   }
 }
-

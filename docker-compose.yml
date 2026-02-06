@@ -118,7 +118,7 @@ services:
       - ZKEVM_NODE_STATEDB_PASSWORD=zkevmpassword
       - ZKEVM_NODE_POOL_DB_HOST=zkevm-db
       - ZKEVM_NODE_POOL_DB_PORT=5432
-      - ZKEVM_NODE_POOL_DB_NAME=zkevmdb
+      - ZKEVM_NODE_POOL_DB_NAME=pooldb
       - ZKEVM_NODE_POOL_DB_USER=zkevmuser
       - ZKEVM_NODE_POOL_DB_PASSWORD=zkevmpassword
     volumes:

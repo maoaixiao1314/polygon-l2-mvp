@@ -29,7 +29,7 @@ GlobalQueue = 512
 	[Pool.DB]
 	User = "zkevmuser"
 	Password = "zkevmpassword"
-	Name = "zkevmdb"
+	Name = "pooldb"
 	Host = "zkevm-db"
 	Port = "5432"
 	EnableLog = false

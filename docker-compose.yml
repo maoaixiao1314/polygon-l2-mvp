@@ -38,33 +38,29 @@ services:
       timeout: 5s
       retries: 5
 
-  # ============ Prover (暂时禁用 - MVP 测试不需要) ============
-  # Prover 是一个复杂的组件，需要大量资源和特殊配置
-  # 对于 MVP 测试，我们可以使用 mock 模式或暂时禁用
+  # ============ Prover (必需 - Sequencer 需要连接 Executor) ============
   
-  # zkevm-prover:
-  #   container_name: zkevm-prover
-  #   image: hermeznetwork/zkevm-prover:v4.0.0
-  #   restart: unless-stopped
-  #   networks:
-  #     - zkevm-network
-  #   volumes:
-  #     - ./config/prover-config.json:/app/config.json
-  #     - ./data/prover:/app/data
-  #   ports:
-  #     - "50061:50061"  # MT service
-  #     - "50071:50071"  # Executor service
-  #   environment:
-  #     - PROVER_THREADS=${PROVER_THREADS:-2}
-  #   command: /app/zkProver -c /app/config.json
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         cpus: '3'
-  #         memory: 8G
-  #       reservations:
-  #         cpus: '2'
-  #         memory: 4G
+  zkevm-prover:
+    container_name: zkevm-prover
+    image: hermeznetwork/zkevm-prover:v4.0.19
+    restart: unless-stopped
+    networks:
+      - zkevm-network
+    depends_on:
+      zkevm-db:
+        condition: service_healthy
+    volumes:
+      - ./config/prover-config.json:/usr/src/app/config.json:ro
+      - ./data/prover:/app/data
+    ports:
+      - "50061:50061"  # HashDB service
+      - "50071:50071"  # Executor service
+    command: /usr/local/bin/zkProver -c /usr/src/app/config.json
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
 
   # ============ Synchronizer ============
   
@@ -112,8 +108,8 @@ services:
     depends_on:
       zkevm-db:
         condition: service_healthy
-      # zkevm-prover:
-      #   condition: service_started
+      zkevm-prover:
+        condition: service_started
     environment:
       - ZKEVM_NODE_STATEDB_HOST=zkevm-db
       - ZKEVM_NODE_STATEDB_PORT=5432
@@ -154,8 +150,8 @@ services:
     depends_on:
       zkevm-db:
         condition: service_healthy
-      # zkevm-prover:
-      #   condition: service_started
+      zkevm-prover:
+        condition: service_started
     environment:
       - ZKEVM_NODE_STATEDB_HOST=zkevm-db
       - ZKEVM_NODE_STATEDB_PORT=5432
@@ -178,31 +174,42 @@ services:
           cpus: '0.5'    # 降低到0.5核
           memory: 2G
 
-  # ============ RPC Node (可选 - 如果需要公开访问) ============
+  # ============ RPC Node ============
   
-  # zkevm-rpc:
-  #   container_name: zkevm-rpc
-  #   image: hermeznetwork/zkevm-node:v0.6.0
-  #   restart: unless-stopped
-  #   networks:
-  #     - zkevm-network
-  #   depends_on:
-  #     zkevm-db:
-  #       condition: service_healthy
-  #   environment:
-  #     - ZKEVM_NODE_STATEDB_HOST=zkevm-db
-  #     - ZKEVM_NODE_POOL_DB_HOST=zkevm-db
-  #   volumes:
-  #     - ./config/node-config.toml:/app/config.toml
-  #     - ./config/genesis.json:/app/genesis.json
-  #   ports:
-  #     - "8123:8545"  # Public RPC
-  #   command: run --network custom --custom-network-file /app/genesis.json --cfg /app/config.toml --components rpc
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         cpus: '2'
-  #         memory: 4G
+  zkevm-rpc:
+    container_name: zkevm-rpc
+    image: hermeznetwork/zkevm-node:v0.7.0
+    restart: unless-stopped
+    networks:
+      - zkevm-network
+    depends_on:
+      zkevm-db:
+        condition: service_healthy
+    environment:
+      - ZKEVM_NODE_STATEDB_HOST=zkevm-db
+      - ZKEVM_NODE_STATEDB_PORT=5432
+      - ZKEVM_NODE_STATEDB_NAME=zkevmdb
+      - ZKEVM_NODE_STATEDB_USER=zkevmuser
+      - ZKEVM_NODE_STATEDB_PASSWORD=zkevmpassword
+      - ZKEVM_NODE_POOL_DB_HOST=zkevm-db
+      - ZKEVM_NODE_POOL_DB_PORT=5432
+      - ZKEVM_NODE_POOL_DB_NAME=zkevmdb
+      - ZKEVM_NODE_POOL_DB_USER=zkevmuser
+      - ZKEVM_NODE_POOL_DB_PASSWORD=zkevmpassword
+    volumes:
+      - ./config/node-config.toml:/app/config.toml:ro
+      - ./config/genesis.json:/app/genesis.json:ro
+    ports:
+      - "8123:8545"  # Public RPC
+    command:
+      - "/bin/sh"
+      - "-c"
+      - "/app/zkevm-node run --network custom --custom-network-file /app/genesis.json --cfg /app/config.toml --components rpc"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 2G
 
 # ============================================
 # 资源总计 (MVP 单服务器)

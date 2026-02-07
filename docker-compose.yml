@@ -42,7 +42,7 @@ services:
   
   zkevm-prover:
     container_name: zkevm-prover
-    image: hermeznetwork/zkevm-prover:v4.0.19
+    image: hermeznetwork/zkevm-prover:v6.0.0
     restart: unless-stopped
     networks:
       - zkevm-network

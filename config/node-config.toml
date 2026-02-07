@@ -41,6 +41,12 @@ ForkIDChunkSize = 20000
 MultiGasProvider = false
 	[Etherman.Etherscan]
 		ApiKey = ""
+	
+# L1 Contract Addresses (Fork 11 Deployment)
+[Etherman.Contracts]
+GlobalExitRootManagerAddr = "0xDDb8f6eb3D3aFf0de5E4B6eB44E045b58c20f0e9"
+RollupManagerAddr = "0xcFE4f6FF54C61Cb2aB092cF3D1873036aDdaD54A"
+POLAddr = "0x1dd7133aC43311345F78776E8C1bDA79Ff690E07"
 
 [RPC]
 Host = "0.0.0.0"

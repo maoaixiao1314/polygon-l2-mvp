@@ -1,97 +1,50 @@
 #!/bin/bash
-
-# Polygon L2 MVP 启动脚本
-# 用于在服务器上启动 L2 节点
-
 set -e
 
-echo "=========================================="
-echo "Polygon L2 MVP - 启动脚本"
-echo "=========================================="
+echo "🚀 启动 Polygon zkEVM L2..."
 
-# 检查 .env 文件
-if [ ! -f .env ]; then
-    echo "❌ 错误: .env 文件不存在"
-    echo "请先创建 .env 文件"
-    exit 1
-fi
+# 1. 启动所有服务
+docker compose up -d
 
-# 检查 genesis.json
-if [ ! -f config/genesis.json ]; then
-    echo "❌ 错误: config/genesis.json 不存在"
-    echo "请从 zkevm-contracts 复制 genesis.json:"
-    echo "cp ~/zkevm-contracts/deployment/v2/genesis.json ~/polygon-l2-mvp/config/genesis.json"
-    exit 1
-fi
+# 2. 等待数据库健康检查通过
+echo "⏳ 等待数据库启动..."
+timeout 60 bash -c 'until docker compose exec -T zkevm-db pg_isready -U zkevmuser > /dev/null 2>&1; do sleep 2; done'
 
-# 创建数据目录
-echo "📁 创建数据目录..."
-mkdir -p data/postgres data/prover
-chmod -R 777 data/
+# 3. 初始化 Prover 表（如果不存在）
+echo "📊 初始化 Prover 数据库表..."
+docker compose exec -T zkevm-db psql -U zkevmuser -d zkevmdb << 'SQL'
+CREATE TABLE IF NOT EXISTS state.nodes (
+    hash BYTEA PRIMARY KEY,
+    data BYTEA NOT NULL
+);
+CREATE TABLE IF NOT EXISTS state.program (
+    hash BYTEA PRIMARY KEY,
+    data BYTEA NOT NULL
+);
+SQL
 
-# 停止旧容器
-echo "🛑 停止旧容器..."
-docker compose down
+# 4. 重启 Prover
+echo "🔄 重启 Prover..."
+docker compose restart zkevm-prover
 
-# 启动数据库
-echo "🗄️  启动 PostgreSQL 数据库..."
-docker compose up -d zkevm-db
-
-# 等待数据库就绪
-echo "⏳ 等待数据库启动 (15秒)..."
+# 5. 等待服务稳定
+echo "⏳ 等待服务稳定..."
 sleep 15
 
-# 检查数据库健康状态
-echo "🔍 检查数据库状态..."
-docker compose ps zkevm-db
-
-# 启动 Prover (暂时跳过 - MVP 测试不需要)
-# echo "🔐 启动 Prover..."
-# docker compose up -d zkevm-prover
-# echo "⏳ 等待 Prover 启动 (10秒)..."
-# sleep 10
-
-# 启动 Synchronizer
-echo "🔄 启动 Synchronizer..."
-docker compose up -d zkevm-sync
-
-# 等待 Synchronizer 同步
-echo "⏳ 等待 Synchronizer 初始化 (10秒)..."
-sleep 10
-
-# 启动 Sequencer
-echo "📦 启动 Sequencer..."
-docker compose up -d zkevm-sequencer
-
-# 等待 Sequencer 启动
-echo "⏳ 等待 Sequencer 启动 (10秒)..."
-sleep 10
-
-# 启动 Aggregator
-echo "🔗 启动 Aggregator..."
-docker compose up -d zkevm-aggregator
+# 6. 显示状态
+echo ""
+echo "✅ 服务状态："
+docker compose ps
 
 echo ""
-echo "=========================================="
-echo "✅ 所有服务已启动！"
-echo "=========================================="
+echo "🎉 L2 启动完成！"
+echo "📍 RPC 端点: http://localhost:8123"
+echo "📍 Sequencer RPC: http://localhost:8547"
 echo ""
-echo "📊 查看服务状态:"
-echo "   docker compose ps"
+echo "🔍 查看日志："
+echo "  docker compose logs -f zkevm-sequencer"
+echo "  docker compose logs -f zkevm-prover"
+echo "  docker compose logs -f zkevm-sync"
 echo ""
-echo "📝 查看日志:"
-echo "   docker compose logs -f"
-echo ""
-echo "🔍 查看特定服务日志:"
-echo "   docker compose logs -f zkevm-sequencer"
-echo "   docker compose logs -f zkevm-sync"
-echo "   docker compose logs -f zkevm-aggregator"
-echo ""
-echo "🌐 L2 RPC 端点:"
-echo "   http://localhost:8547"
-echo ""
-echo "🛑 停止所有服务:"
-echo "   docker compose down"
-echo ""
-echo "=========================================="
-
+echo "🧪 测试 RPC："
+echo "  curl -X POST http://localhost:8123 -H 'Content-Type: application/json' -d '{\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[],\"id\":1}'"

@@ -183,7 +183,7 @@ services:
     networks:
       - zkevm-network
     extra_hosts:
-      - "54.169.30.130:172.19.0.6"
+      - "52.76.210.218:172.19.0.6"
     depends_on:
       zkevm-db:
         condition: service_healthy

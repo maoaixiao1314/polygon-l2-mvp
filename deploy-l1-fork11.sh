@@ -26,7 +26,7 @@ fi
 
 if [ -z "$L1_RPC_URL" ]; then
     echo -e "${YELLOW}警告: L1_RPC_URL 未设置，使用默认值${NC}"
-    export L1_RPC_URL="http://54.169.30.130:8545"
+    export L1_RPC_URL="http://52.76.210.218:8545"
 fi
 
 echo -e "${GREEN}✓ 环境变量检查通过${NC}"
@@ -69,7 +69,7 @@ echo -e "\n${GREEN}创建部署参数文件...${NC}"
 cat > deployment/v2/deploy_parameters.json << EOF
 {
   "realVerifier": true,
-  "trustedSequencerURL": "http://54.169.30.130:8547",
+  "trustedSequencerURL": "http://52.76.210.218:8547",
   "networkName": "atoshi-zkevm",
   "version": "0.0.1",
   "trustedSequencer": "$DEPLOYER_ADDRESS",

@@ -132,7 +132,7 @@ services:
     command:
       - "/bin/sh"
       - "-c"
-      - "/app/zkevm-node run --network custom --custom-network-file /app/genesis.json --cfg /app/config.toml --components sequencer"
+      - "/app/zkevm-node run --network custom --custom-network-file /app/genesis.json --cfg /app/config.toml --components sequencer,rpc"
     deploy:
       resources:
         limits:
@@ -182,6 +182,8 @@ services:
     restart: unless-stopped
     networks:
       - zkevm-network
+    extra_hosts:
+      - "54.169.30.130:172.19.0.6"
     depends_on:
       zkevm-db:
         condition: service_healthy
